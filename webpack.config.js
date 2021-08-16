@@ -1,5 +1,8 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
+
+const isDev = process.env.NODE_ENV === 'development';
 
 module.exports = {
   entry: './index.js',
@@ -20,7 +23,7 @@ module.exports = {
       {
         test: /\.css$/i,
         use: [
-          "style-loader",
+          (isDev ? "style-loader" :  MiniCssExtractPlugin.loader),
           {
             loader: "css-loader",
             options: {
@@ -49,5 +52,11 @@ module.exports = {
       template: './index.html',
       scriptLoading: 'defer',
     }),
+    ...(isDev ? [] : [
+      new MiniCssExtractPlugin({
+        filename: '[name].[contenthash].css',
+        chunkFilename: '[name].[contenthash].css',
+      })
+    ])
   ],
 };
