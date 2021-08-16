@@ -23,14 +23,9 @@ module.exports = {
       {
         test: /\.css$/i,
         use: [
-          (isDev ? "style-loader" :  MiniCssExtractPlugin.loader),
-          {
-            loader: "css-loader",
-            options: {
-              modules: true,
-            }
-          },
-          "postcss-loader",
+          {loader: MiniCssExtractPlugin.loader},
+          {loader: "css-loader"},
+          {loader: "postcss-loader"},
         ]
       },
       {
@@ -52,11 +47,6 @@ module.exports = {
       template: './index.html',
       scriptLoading: 'defer',
     }),
-    ...(isDev ? [] : [
-      new MiniCssExtractPlugin({
-        filename: '[name].[contenthash].css',
-        chunkFilename: '[name].[contenthash].css',
-      })
-    ])
+    new MiniCssExtractPlugin(),
   ],
 };
