@@ -1,6 +1,4 @@
-import init from '/src/init.js';
-import './src/style.css'
+import './src/style.css';
+import init from './src/init.js';
 
-init()
-
-
+init();
