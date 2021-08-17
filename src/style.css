@@ -1,18 +1,18 @@
 @font-face {
-    font-family: 'Arial';
-    src: url('./fonts/ArialMT.woff') format('woff');
+    font-family: "Arial";
+    src: url("./fonts/ArialMT.woff") format("woff");
     font-weight: 400;
     font-style: normal;
 }
 @font-face {
-    font-family: 'Arial';
-    src: url('./fonts/Arial-BoldMT.woff') format('woff');
+    font-family: "Arial";
+    src: url("./fonts/Arial-BoldMT.woff") format("woff");
     font-weight: 700;
     font-style: normal;
 }
 @font-face {
-    font-family: 'ProximaNovaCond';
-    src: url('./fonts/ProximaNovaCond-Bold.woff') format('woff');
+    font-family: "ProximaNovaCond";
+    src: url("./fonts/ProximaNovaCond-Bold.woff") format("woff");
     font-weight: 700;
     font-style: normal;
 }
@@ -22,21 +22,22 @@ html {
 }
 
 * {
-    font-family: 'Arial', serif;
+    font-family: "Arial", serif;
     font-weight: normal;
 }
 
-*, *:after, *:before {
+*,
+*:after,
+*:before {
     box-sizing: inherit;
 }
-
 
 .reg-title {
     text-align: center;
     font-weight: 900;
     font-size: 34px;
     line-height: 38px;
-    font-family: 'ProximaNovaCond';
+    font-family: "ProximaNovaCond";
 }
 .button {
     width: 170px;
@@ -44,8 +45,8 @@ html {
     height: 46px;
     padding: 12px 25px 12px 25px;
     color: #fff;
-    background-color: #2998FF;
-    border: 1px solid #0F8FEE;
+    background-color: #2998ff;
+    border: 1px solid #0f8fee;
     border-radius: 3px;
     font-size: 16px;
     line-height: 22px;
@@ -60,12 +61,12 @@ html {
     font-weight: normal;
 }
 .button:hover {
-    background-color: #0070C1;
+    background-color: #0070c1;
 }
 .form__img {
     margin-bottom: 32px;
 }
-.form__img img{
+.form__img img {
     width: 274px;
     display: block;
     margin: 0 auto;
@@ -75,16 +76,41 @@ html {
     display: block;
     margin: 0 auto;
 }
+.form__img_small {
+    width: 30%;
+    height: 50%;
+}
 .form {
     margin-top: 62px;
     max-width: 670px;
     min-width: 320px;
     height: 335px;
     border-radius: 3px;
-    background: #FFFFFF;
-    box-shadow: 0px 4px 18px rgba(0, 0, 0, 0.09), 0px 3px 19px rgba(51, 51, 51, 0.04);
+    background: #ffffff;
+    box-shadow: 0px 4px 18px rgba(0, 0, 0, 0.09),
+        0px 3px 19px rgba(51, 51, 51, 0.04);
     display: flex;
     flex-direction: column;
+    position: relative;
+}
+.form_light {
+    height: 380px; 
+}
+.form_full {
+    height: 648px; 
+}
+.descr {
+    color: #999999;
+    font-size: 12px;
+    line-height: 18px;
+    position: absolute;
+    margin: 0 28px 0 37px;
+}
+.descr_light {
+    top: 80%;
+}
+.descr_full {
+    top: 87%;
 }
 .form__container_small {
     /* display: grid;
@@ -93,12 +119,34 @@ html {
     grid-template-rows: repeat(5, 1fr);
     grid-template-areas: "email photo" "city photo" "check ." "button ." "descr ."; */
 }
+form input {
+    width: 368px;
+    height: 48px;
+    margin-bottom: 18px;
+    border: 1px solid #e5e5e5;
+    padding: 15px 0px 15px 15px;
+    border-radius: 3px;
+    font-size: 16px;
+    line-height: 18px;
+    font-family: 'Arial';
+}
+form label {
+    margin: 16px 0 36px 0;
+}
+form input::placeholder {
+    color: #B3B3B3;
+}
 .form__container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex-wrap: nowrap;
-    
+    height: 100%;
+    padding: 34px 20px 0 37px;
 }
+.form__content {
+    width: 70%;
+}
+
 .form__inputCheck {
     position: absolute;
     z-index: -1;
@@ -110,7 +158,7 @@ html {
     user-select: none;
 }
 .form__inputCheck + label::before {
-    content: '';
+    content: "";
     display: inline-block;
     width: 16px;
     height: 16px;
@@ -124,9 +172,9 @@ html {
     background-size: 70%;
 }
 .form__inputCheck:checked + label::before {
-    border-color: #0F8FEE;
-    background-color: #0F8FEE;
-    background-image: url('./images/checkbox.png')
+    border-color: #0f8fee;
+    background-color: #0f8fee;
+    background-image: url("./images/checkbox.png");
 }
 .choose-reg {
     display: flex;
