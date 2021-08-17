@@ -1,5 +1,10 @@
+import lightImg from '../images/light.png';
+// import fullImg from '../../images/full.png';
+
 export default (state) => {
-  console.log(state)
+  console.log(state);
+  // const img = state.currentForm === 'light' ? lightImg : fullImg;
+  // console.log(img);
   const light = `
     <input type="text" placeholder="Email или телефон">
     <input type="text" placeholder="Город">
@@ -30,9 +35,9 @@ export default (state) => {
         ${form}
       </div>
       <div class="form__img_small">
-        <img src="./src/images/${state.currentForm}.png" alt="${state.currentForm}-form">
+        <img src=${lightImg} alt="${state.currentForm}-form">
       </div>
     </div>
     
   </div>`;
-}
+};

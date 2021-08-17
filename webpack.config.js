@@ -2,7 +2,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 
-const isDev = process.env.NODE_ENV === 'development';
+// const isDev = process.env.NODE_ENV === 'development';
 
 module.exports = {
   entry: './index.js',
@@ -23,22 +23,33 @@ module.exports = {
       {
         test: /\.css$/i,
         use: [
-          {loader: MiniCssExtractPlugin.loader},
-          {loader: "css-loader"},
-          {loader: "postcss-loader"},
-        ]
+          { loader: MiniCssExtractPlugin.loader },
+          { loader: 'css-loader' },
+          { loader: 'postcss-loader' },
+        ],
       },
       {
-        test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
+        test: /\.(png|jpg|gif)$/i,
         type: 'asset/resource',
+        generator: {
+          filename: 'images/[hash][ext][query]',
+        },
       },
       {
         test: /\.(?:|woff)$/i,
-        type: 'asset/inline',
+        type: 'asset',
+        parser: {
+          dataUrlCondition: {
+            maxSize: 8 * 1024,
+          },
+        },
+        generator: {
+          filename: 'fonts/[hash][ext][query]',
+        },
       },
       {
         test: /\.html$/,
-        use: 'html-loader'
+        use: 'html-loader',
       },
     ],
   },

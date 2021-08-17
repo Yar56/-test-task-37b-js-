@@ -1,5 +1,5 @@
-import fullForm from './components/fullForm/index.js';
-import lightForm from './components/lightFrom/index.js';
+import fullForm from './components/FormComponent.js';
+// import lightForm from './components/lightFrom/index.js';
 
 export default () => {
   const state = {
