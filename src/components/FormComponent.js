@@ -1,9 +1,11 @@
+/* eslint-disable no-param-reassign */
+
 import lightImg from '../images/light.png';
 import fullImg from '../images/full.png';
 import closeForm from '../images/closeForm.png';
 
 export default (state) => {
-  console.log(state);
+  // console.log(state);
   const img = state.currentForm === 'light' ? lightImg : fullImg;
   const className = state.currentForm === 'light' ? 'light' : 'full';
   // const renderInputsLightForm = () => {
@@ -13,16 +15,16 @@ export default (state) => {
   // }
   const light = [
     '<div class="email phone"><input type="text" class="_req _email _phone" placeholder="Email или телефон" name="email" value=""></div>',
-    '<div class="city"><input type="text" class="_req _city" placeholder="Город" name="city" value=""></div>',
+    '<div class="city"><input type="text" class="_req _city _сyrillic" placeholder="Город" name="city" value=""></div>',
   ];
 
   const full = [
-    '<div class="name"><input type="text" class="_req _name" placeholder="Имя" name="name" value=""></div>',
-    '<div class="firstName"><input type="text" class="_req _firstName" placeholder="Фамилия" name="firstName" value=""></div>',
+    '<div class="name"><input type="text" class="_req _name _сyrillic" placeholder="Имя" name="name" value=""></div>',
+    '<div class="firstName"><input type="text" class="_req _firstName _сyrillic" placeholder="Фамилия" name="firstName" value=""></div>',
     '<div class="phone"><input type="text" class="_req _phone" placeholder="Телефон" name="phone" value=""></div>',
     '<div class="email"><input type="text" class="_req _email" placeholder="Email" name="email" value=""></div>',
     '<div class="company"><input type="text" class="_req _company" placeholder="Название компании" name="company" value=""></div>',
-    '<div class="region"><input type="text" class="_req _region" placeholder="Регион" name="region" value=""></div>',
+    '<div class="region"><input type="text" class="_req _region _сyrillic" placeholder="Регион" name="region" value=""></div>',
   ];
   const elements = () => {
     const currentInputs = state.currentForm === 'light' ? light : full;
@@ -47,54 +49,72 @@ export default (state) => {
   const validateEmailAndPhone = (input) => /\+[0-9]{1,4}[0-9]{1,10}|(.*)@(.*)\.[a-z]{2,5}/.test(input.value);
   // const validatePhoneNumber = (input) => /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/
   //   .test(input.value);
+  const validateСyrillic = (input) => /[А-Яа-яЁё ]+/g.test(input.value);
 
-  const formValidate = (formEl) => {
-    const errors = {};
+  const formValidate = (stateProcessForm) => {
+    // const errors = {};
 
     const formReq = document.querySelectorAll('._req');
     formReq.forEach((checkInput) => {
       formRemoveError(checkInput);
-      // console.log(checkInput)
+
       if (checkInput.classList.contains('_email') || checkInput.classList.contains('_phone')) {
         if (!validateEmailAndPhone(checkInput)) {
           formAddError(checkInput);
-          errors[checkInput.name] = 'Введен неправильный emal или телефон';
+          stateProcessForm.errors[checkInput.name] = 'Введен неправильный emal или телефон';
         }
       }
+      if (checkInput.classList.contains('_сyrillic')) {
+        console.log(validateСyrillic(checkInput));
+        if (!validateСyrillic(checkInput)) {
+          formAddError(checkInput);
+          stateProcessForm.errors[checkInput.name] = 'Только русские буквы';
+        }
+      }
+
       if (checkInput.value === '') {
         formAddError(checkInput);
-        errors[checkInput.name] = 'Обязательное поле';
+        stateProcessForm.errors[checkInput.name] = 'Обязательное поле';
       }
     });
-    return errors;
   };
 
   const renderErrors = (errors, form) => {
     console.log(errors);
-    // console.log(form.children)
+
     [...form.children].forEach((child) => {
       if (child.classList.contains('_error')) {
-        // console.log(child)
-        // const div = document.querySelector(`.${child.name}`);
-        // console.log(child.classList)
         const div = document.createElement('div');
         div.classList.add('err-tooltip');
         div.textContent = errors[child.classList[0]];
         child.appendChild(div);
       }
-    })
+    });
   };
 
   const renderForm = () => {
     const form = document.createElement('form');
     form.innerHTML = elements().join('');
+
+    [...form.children].filter((el) => el.tagName === 'DIV').forEach((el) => {
+      const [input] = el.children;
+      input.addEventListener('input', (e) => {
+        if (e.target.classList.contains('_error')) {
+          e.target.nextElementSibling.innerHTML = '';
+          formRemoveError(e.target);
+        }
+      });
+    });
+
     form.addEventListener('submit', (e) => {
       e.preventDefault();
 
-      const errors = formValidate(form);
-      // console.log(errors);
-      if (Object.keys(errors).length !== 0) {
-        renderErrors(errors, form);
+      formValidate(state.formState.proccess);
+      console.log(state);
+
+      if (Object.keys(state.formState.proccess.errors).length !== 0) {
+        renderErrors(state.formState.proccess.errors, form);
+        state.formState.proccess.errors = {};
       } else {
         const data = new FormData(e.target);
         const [...iter] = data.entries();
@@ -104,9 +124,11 @@ export default (state) => {
           acc[name] = value;
           return acc;
         }, {});
+        state.formState.proccess.errors = {};
         console.log(res);
-        form.reset()
+        form.reset();
       }
+      console.log(state)
     });
     return form;
   };

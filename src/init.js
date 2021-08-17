@@ -5,7 +5,7 @@ export default () => {
   const state = {
     formState: {
       proccess: {
-        error: null,
+        errors: {},
         success: null,
       },
       valid: true,
@@ -19,7 +19,6 @@ export default () => {
 
   [...buttons].forEach((btn) => {
     btn.addEventListener('click', (buttonEvent) => {
-      console.log(buttonEvent.target.id);
       content.innerHTML = '';
       if (buttonEvent.target.id === 'light') {
         state.currentForm = 'light';
