@@ -29,6 +29,9 @@ export default () => {
         state.currentForm = 'full';
         content.appendChild(fullForm(state));
       }
+      // if (state.formData) {
+      //   console.log(state.formData);
+      // }
     });
   });
 

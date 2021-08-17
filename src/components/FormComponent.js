@@ -12,34 +12,101 @@ export default (state) => {
   //   inputName.setAttribute('type', )
   // }
   const light = [
-    '<input type="text" placeholder="Email или телефон">',
-    '<input type="text" placeholder="Город">',
+    '<div class="email phone"><input type="text" class="_req _email _phone" placeholder="Email или телефон" name="email" value=""></div>',
+    '<div class="city"><input type="text" class="_req _city" placeholder="Город" name="city" value=""></div>',
   ];
 
-  const full = `
-    <input type="text" placeholder="Имя">
-    <input type="text" placeholder="Фамилия">
-    <input type="text" placeholder="Телефон">
-    <input type="text" placeholder="Email">
-    <input type="text" placeholder="Название компании">
-    <input type="text" placeholder="Регион">
-  `;
+  const full = [
+    '<div class="name"><input type="text" class="_req _name" placeholder="Имя" name="name" value=""></div>',
+    '<div class="firstName"><input type="text" class="_req _firstName" placeholder="Фамилия" name="firstName" value=""></div>',
+    '<div class="phone"><input type="text" class="_req _phone" placeholder="Телефон" name="phone" value=""></div>',
+    '<div class="email"><input type="text" class="_req _email" placeholder="Email" name="email" value=""></div>',
+    '<div class="company"><input type="text" class="_req _company" placeholder="Название компании" name="company" value=""></div>',
+    '<div class="region"><input type="text" class="_req _region" placeholder="Регион" name="region" value=""></div>',
+  ];
   const elements = () => {
     const currentInputs = state.currentForm === 'light' ? light : full;
     return [
       ...currentInputs,
       '<input class="form__inputCheck" type="checkbox" id="agreement" name="agreement" value="yes">',
       '<label for="agreement">Я&nbsp;хочу получить рассылку после мероприятия</label>',
-      '<button type="submit" class="button button_form">Зарегистрироваться</button>'
+      '<button type="submit" class="button button_form">Зарегистрироваться</button>',
     ];
+  };
+
+  const formAddError = (input) => {
+    input.parentElement.classList.add('_error');
+    input.classList.add('_error');
+  };
+  const formRemoveError = (input) => {
+    input.parentElement.classList.remove('_error');
+    input.classList.remove('_error');
+  };
+  // const validateEmailAndPhone = (input) => /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  //   .test(input.value);
+  const validateEmailAndPhone = (input) => /\+[0-9]{1,4}[0-9]{1,10}|(.*)@(.*)\.[a-z]{2,5}/.test(input.value);
+  // const validatePhoneNumber = (input) => /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/
+  //   .test(input.value);
+
+  const formValidate = (formEl) => {
+    const errors = {};
+
+    const formReq = document.querySelectorAll('._req');
+    formReq.forEach((checkInput) => {
+      formRemoveError(checkInput);
+      // console.log(checkInput)
+      if (checkInput.classList.contains('_email') || checkInput.classList.contains('_phone')) {
+        if (!validateEmailAndPhone(checkInput)) {
+          formAddError(checkInput);
+          errors[checkInput.name] = 'Введен неправильный emal или телефон';
+        }
+      }
+      if (checkInput.value === '') {
+        formAddError(checkInput);
+        errors[checkInput.name] = 'Обязательное поле';
+      }
+    });
+    return errors;
+  };
+
+  const renderErrors = (errors, form) => {
+    console.log(errors);
+    // console.log(form.children)
+    [...form.children].forEach((child) => {
+      if (child.classList.contains('_error')) {
+        // console.log(child)
+        // const div = document.querySelector(`.${child.name}`);
+        // console.log(child.classList)
+        const div = document.createElement('div');
+        div.classList.add('err-tooltip');
+        div.textContent = errors[child.classList[0]];
+        child.appendChild(div);
+      }
+    })
   };
 
   const renderForm = () => {
     const form = document.createElement('form');
     form.innerHTML = elements().join('');
     form.addEventListener('submit', (e) => {
-      e.preventDefault()
-      console.log(e)
+      e.preventDefault();
+
+      const errors = formValidate(form);
+      // console.log(errors);
+      if (Object.keys(errors).length !== 0) {
+        renderErrors(errors, form);
+      } else {
+        const data = new FormData(e.target);
+        const [...iter] = data.entries();
+
+        const res = iter.reduce((acc, item) => {
+          const [name, value] = item;
+          acc[name] = value;
+          return acc;
+        }, {});
+        console.log(res);
+        form.reset()
+      }
     });
     return form;
   };

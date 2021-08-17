@@ -135,6 +135,14 @@ form label {
 form input::placeholder {
     color: #B3B3B3;
 }
+._error input{
+    border: 2px solid red;
+}
+.err-tooltip {
+    background-color: red;
+    opacity: 0.6;
+    color: #fff
+}
 .form__container {
     display: flex;
     flex-direction: row;
