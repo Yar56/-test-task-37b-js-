@@ -112,12 +112,11 @@ html {
 .descr_full {
     top: 87%;
 }
-.form__container_small {
-    /* display: grid;
-    grid-template-columns: 2fr 1fr;
-    padding: 30px;
-    grid-template-rows: repeat(5, 1fr);
-    grid-template-areas: "email photo" "city photo" "check ." "button ." "descr ."; */
+.close-form {
+    top: 15px;
+    position: absolute;
+    right: 16px;
+    cursor: pointer;
 }
 form input {
     width: 368px;

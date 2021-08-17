@@ -23,13 +23,14 @@ export default () => {
       content.innerHTML = '';
       if (buttonEvent.target.id === 'light') {
         state.currentForm = 'light';
-        content.innerHTML = fullForm(state);
+        content.appendChild(fullForm(state));
       }
       if (buttonEvent.target.id === 'full') {
         state.currentForm = 'full';
-        content.innerHTML = fullForm(state);
+        content.appendChild(fullForm(state));
       }
     });
   });
+
   // document.body.innerHTML = fullForm(state);
 };
