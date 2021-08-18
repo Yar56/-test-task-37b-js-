@@ -71,6 +71,9 @@ export default (state) => {
   const renderErrors = (errors, form) => {
     [...form.children].forEach((child) => {
       if (child.classList.contains('_error')) {
+        if (child.children[1]) {
+          child.removeChild(child.children[1]);
+        }
         const errorDiv = document.createElement('div');
         errorDiv.classList.add('err-tooltip');
         errorDiv.textContent = errors[child.classList[0]];
@@ -103,14 +106,20 @@ export default (state) => {
         renderErrors(state.formState.proccess.errors, form);
         state.formState.proccess.errors = {};
       } else {
-        const data = new FormData(e.target);
-        const [...iter] = data.entries();
+        const fromEl = document.querySelector('form');
+        const [...formData] = fromEl.elements;
 
-        const res = iter.reduce((acc, item) => {
-          const [name, value] = item;
-          acc[name] = value;
-          return acc;
-        }, {});
+        const res = formData.filter((el) => el.tagName === 'INPUT')
+          .reduce((acc, item) => {
+            if (item.classList.contains('form__inputCheck')) {
+              const agr = item.checked === false ? 'no' : 'yes';
+              acc[item.name] = agr;
+            } else {
+              acc[item.name] = item.value;
+            }
+            return acc;
+          }, {});
+
         state.formState.proccess.errors = {};
         console.log(res);
         form.reset();
@@ -126,11 +135,13 @@ export default (state) => {
   const descr = document.createElement('div');
   const closeFormEl = document.createElement('div');
 
-  form.classList.add('form', `form_${className}`);
+  form.classList.add('form');
+  form.classList.add(`form_${className}`);
   formContainer.classList.add('form__container');
   formContent.classList.add('form__content');
   formImgSmall.classList.add('form__img_small');
-  descr.classList.add('descr', `descr_${className}`);
+  descr.classList.add('descr');
+  descr.classList.add(`descr_${className}`);
   closeFormEl.classList.add('close-form');
 
   closeFormEl.addEventListener('click', () => window.location.reload());

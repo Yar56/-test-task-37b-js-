@@ -17,6 +17,7 @@ module.exports = function (api) {
     ],
   ];
   const plugins = [
+    ['@babel/plugin-transform-template-literals'],
     ['@babel/plugin-transform-arrow-functions'],
     ['@babel/plugin-transform-runtime'],
   ];
