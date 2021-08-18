@@ -5,7 +5,7 @@ const path = require('path');
 // const isDev = process.env.NODE_ENV === 'development';
 
 module.exports = {
-  entry: './index.js',
+  entry: ['core-js/stable', './index.js'],
   mode: process.env.NODE_ENV || 'development',
   output: {
     filename: 'index_bundle.js',
