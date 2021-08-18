@@ -1,6 +1,6 @@
 # -test-task-37b-js-
 
-## Тестовое задание (верстка)
+## Тестовое задание (js)
 ## requirements
 nodejs (14.17.3), make
 
