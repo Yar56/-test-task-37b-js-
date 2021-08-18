@@ -138,10 +138,22 @@ form input::placeholder {
 ._error input{
     border: 2px solid red;
 }
+form > div {
+    position: relative;
+}
 .err-tooltip {
+    padding-top: 5px;
     background-color: red;
-    opacity: 0.6;
-    color: #fff
+    opacity: 0.8;
+    color: #fff;
+    position: absolute;
+    top: 47px;
+    z-index: 1;
+    height: 30px;
+    width: 86%;
+    border-radius: 3px;
+    /* border-bottom-right-radius: 5px; */
+    /* border-bottom-left-radius: 5px; */
 }
 .form__container {
     display: flex;

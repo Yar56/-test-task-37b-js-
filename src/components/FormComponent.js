@@ -5,28 +5,22 @@ import fullImg from '../images/full.png';
 import closeForm from '../images/closeForm.png';
 
 export default (state) => {
-  // console.log(state);
   const img = state.currentForm === 'light' ? lightImg : fullImg;
   const className = state.currentForm === 'light' ? 'light' : 'full';
-  // const renderInputsLightForm = () => {
-  //   const inputName = document.createElement('input');
-  //   const inputCity = document.createElement('input');
-  //   inputName.setAttribute('type', )
-  // }
-  const light = [
-    '<div class="email phone"><input type="text" class="_req _email _phone" placeholder="Email или телефон" name="email" value=""></div>',
-    '<div class="city"><input type="text" class="_req _city _сyrillic" placeholder="Город" name="city" value=""></div>',
-  ];
 
-  const full = [
-    '<div class="name"><input type="text" class="_req _name _сyrillic" placeholder="Имя" name="name" value=""></div>',
-    '<div class="firstName"><input type="text" class="_req _firstName _сyrillic" placeholder="Фамилия" name="firstName" value=""></div>',
-    '<div class="phone"><input type="text" class="_req _phone" placeholder="Телефон" name="phone" value=""></div>',
-    '<div class="email"><input type="text" class="_req _email" placeholder="Email" name="email" value=""></div>',
-    '<div class="company"><input type="text" class="_req _company" placeholder="Название компании" name="company" value=""></div>',
-    '<div class="region"><input type="text" class="_req _region _сyrillic" placeholder="Регион" name="region" value=""></div>',
-  ];
   const elements = () => {
+    const light = [
+      '<div class="email phone"><input type="text" class="_req _email _phone" placeholder="Email или телефон" name="email" value=""></div>',
+      '<div class="city"><input type="text" class="_req _city _сyrillic" placeholder="Город" name="city" value=""></div>',
+    ];
+    const full = [
+      '<div class="name"><input type="text" class="_req _name _сyrillic" placeholder="Имя" name="name" value=""></div>',
+      '<div class="firstName"><input type="text" class="_req _firstName _сyrillic" placeholder="Фамилия" name="firstName" value=""></div>',
+      '<div class="phone"><input type="text" class="_req _phone" placeholder="Телефон" name="phone" value=""></div>',
+      '<div class="email"><input type="text" class="_req _email" placeholder="Email" name="email" value=""></div>',
+      '<div class="company"><input type="text" class="_req _company" placeholder="Название компании" name="company" value=""></div>',
+      '<div class="region"><input type="text" class="_req _region _сyrillic" placeholder="Регион" name="region" value=""></div>',
+    ];
     const currentInputs = state.currentForm === 'light' ? light : full;
     return [
       ...currentInputs,
@@ -44,17 +38,13 @@ export default (state) => {
     input.parentElement.classList.remove('_error');
     input.classList.remove('_error');
   };
-  // const validateEmailAndPhone = (input) => /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  //   .test(input.value);
-  const validateEmailAndPhone = (input) => /\+[0-9]{1,4}[0-9]{1,10}|(.*)@(.*)\.[a-z]{2,5}/.test(input.value);
-  // const validatePhoneNumber = (input) => /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/
-  //   .test(input.value);
+
+  const validateEmailAndPhone = (input) => /(\+|)[0-9]{1,4}[0-9]{1,10}|(.*)@(.*)\.[a-z]{2,5}/.test(input.value);
   const validateСyrillic = (input) => /[А-Яа-яЁё ]+/g.test(input.value);
 
   const formValidate = (stateProcessForm) => {
-    // const errors = {};
-
     const formReq = document.querySelectorAll('._req');
+
     formReq.forEach((checkInput) => {
       formRemoveError(checkInput);
 
@@ -65,7 +55,6 @@ export default (state) => {
         }
       }
       if (checkInput.classList.contains('_сyrillic')) {
-        console.log(validateСyrillic(checkInput));
         if (!validateСyrillic(checkInput)) {
           formAddError(checkInput);
           stateProcessForm.errors[checkInput.name] = 'Только русские буквы';
@@ -80,14 +69,12 @@ export default (state) => {
   };
 
   const renderErrors = (errors, form) => {
-    console.log(errors);
-
     [...form.children].forEach((child) => {
       if (child.classList.contains('_error')) {
-        const div = document.createElement('div');
-        div.classList.add('err-tooltip');
-        div.textContent = errors[child.classList[0]];
-        child.appendChild(div);
+        const errorDiv = document.createElement('div');
+        errorDiv.classList.add('err-tooltip');
+        errorDiv.textContent = errors[child.classList[0]];
+        child.appendChild(errorDiv);
       }
     });
   };
@@ -100,7 +87,8 @@ export default (state) => {
       const [input] = el.children;
       input.addEventListener('input', (e) => {
         if (e.target.classList.contains('_error')) {
-          e.target.nextElementSibling.innerHTML = '';
+          const errorDiv = e.target.nextElementSibling;
+          e.target.parentNode.removeChild(errorDiv);
           formRemoveError(e.target);
         }
       });
@@ -110,7 +98,6 @@ export default (state) => {
       e.preventDefault();
 
       formValidate(state.formState.proccess);
-      console.log(state);
 
       if (Object.keys(state.formState.proccess.errors).length !== 0) {
         renderErrors(state.formState.proccess.errors, form);
@@ -128,7 +115,6 @@ export default (state) => {
         console.log(res);
         form.reset();
       }
-      console.log(state)
     });
     return form;
   };
@@ -146,6 +132,8 @@ export default (state) => {
   formImgSmall.classList.add('form__img_small');
   descr.classList.add('descr', `descr_${className}`);
   closeFormEl.classList.add('close-form');
+
+  closeFormEl.addEventListener('click', () => window.location.reload());
 
   closeFormEl.innerHTML = (`<img src=${closeForm} alt="close-form">`);
   descr.textContent = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do&nbsp;eiusmod tempor incididunt ut&nbsp;labore et&nbsp;dolore magna aliqua. Ut&nbsp;enim ad&nbsp;minim veniam, quis nostrud exercitation ullamco laboris nisi ut&nbsp;aliquip ex&nbsp;ea&nbsp;commodo.';
