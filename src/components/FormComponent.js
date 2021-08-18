@@ -39,7 +39,7 @@ export default (state) => {
     input.classList.remove('_error');
   };
 
-  const validateEmailAndPhone = (input) => /(\+|)[0-9]{1,4}[0-9]{1,10}|(.*)@(.*)\.[a-z]{2,5}/.test(input.value);
+  const validateEmailAndPhone = (input) => /(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?|(.*)@(.*)\.[a-z]{2,5}/.test(input.value);
   const validateСyrillic = (input) => /[А-Яа-яЁё ]+/g.test(input.value);
 
   const formValidate = (stateProcessForm) => {
